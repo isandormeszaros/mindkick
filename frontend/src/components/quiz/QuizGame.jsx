@@ -21,7 +21,14 @@ const QuizGame = () => {
     QuizService.getById(id)
       .then(response => {
         setQuizData(response.data.info);
-        setQuestions(response.data.questions);
+
+    const q = [...response.data.questions];
+        for (let i = q.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [q[i], q[j]] = [q[j], q[i]];
+        }
+
+        setQuestions(q);
         setLoading(false);
       })
       .catch(e => {
@@ -48,7 +55,7 @@ const QuizGame = () => {
 
   const submitQuiz = (finalAnswers) => {
     const data = {
-      userId: 1, // Hardcoded user for now
+      userId: 1, 
       answers: finalAnswers
     };
 

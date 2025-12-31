@@ -12,7 +12,7 @@ const getById = (id) => {
 
 // SUBMIT QUIZ
 const submit = (id, data) => {
-  return http.post(`/api/quizzes/${id}/submit`, data);
+  return http.post(`/quiz/${id}/submit`, data);
 };
 
 const QuizService = {
