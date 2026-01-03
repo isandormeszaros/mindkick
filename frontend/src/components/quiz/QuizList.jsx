@@ -1,0 +1,56 @@
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import QuizService from "../../services/QuizService";
+
+const QuizList = () => {
+  const [quizzes, setQuizzes] = useState([]);
+
+  useEffect(() => {
+    retrieveQuizzes();
+  }, []);
+
+  const retrieveQuizzes = () => {
+    QuizService.getAll()
+      .then(response => {
+        setQuizzes(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
+
+  const getDifficultyColor = (diff) => {
+    if (diff === 'easy') return 'bg-green-100 text-green-800';
+    if (diff === 'medium') return 'bg-yellow-100 text-yellow-800';
+    return 'bg-red-100 text-red-800';
+  };
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {quizzes.map((q) => (
+        <div key={q.id} className="bg-white p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-300 border border-gray-100">
+          <div className="flex justify-between items-start mb-4">
+            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">
+              {q.category_name}
+            </span>
+            <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase ${getDifficultyColor(q.difficulty)}`}>
+              {q.difficulty}
+            </span>
+          </div>
+
+          <h2 className="text-2xl font-bold mb-3 text-gray-800">{q.title}</h2>
+          <p className="text-gray-600 mb-6 text-sm line-clamp-2">{q.description}</p>
+          
+          <Link 
+            to={`/quiz/${q.id}`}
+            className="block w-full text-center bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition"
+          >
+            Indítás
+          </Link>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default QuizList;
