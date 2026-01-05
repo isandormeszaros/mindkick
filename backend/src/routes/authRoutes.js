@@ -1,10 +1,13 @@
 import express from 'express';
-import { register, login } from '../controllers/authController.js';
+import { getUserProfile, getAllBadges, getUserBadges } from '../controllers/userController.js';
+
+import { authenticateToken } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
-router.post('/register', register);
+router.get('/profile', authenticateToken, getUserProfile);
 
-router.post('/login', login);
+router.get('/badges', getAllBadges);
+router.get('/:id/badges', getUserBadges);
 
 export default router;

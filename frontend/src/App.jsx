@@ -7,6 +7,11 @@ import QuizGame from "./components/quiz/QuizGame";
 // import QuizList from "./pages/QuizList";
 // import Leaderboard from "./pages/Leaderboard";
 
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Profile from "./pages/Profile";
+import Leaderboard from "./pages/Leaderboard";
+
 function App() {
   return (
     <BrowserRouter>
@@ -15,6 +20,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/quiz" element={<QuizList />} /> 
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/profile" element={<Profile />} />
           {/* <Route path="/leaderboard" element={<Leaderboard />} /> */}
           <Route path="/quiz/:id" element={<QuizGame />} />
         </Routes>
