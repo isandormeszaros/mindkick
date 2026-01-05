@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
+import Button from "../components/ui/Button";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -30,10 +31,8 @@ const Register = () => {
   return (
     <div className="min-h-screen bg-white flex items-center justify-center pt-20">
       
-      {/* Kártya */}
       <div className="bg-white p-10 rounded-2xl shadow-2xl w-full max-w-md border border-purple-100 relative overflow-hidden">
         
-        {/* Háttér díszítés (halvány lila folt) */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-24 bg-purple-50 blur-3xl rounded-full -z-10"></div>
 
         <h1 className="text-4xl font-extrabold mb-8 text-center text-purple-900">
@@ -83,13 +82,13 @@ const Register = () => {
             />
           </div>
 
-          {/* ITT AZ ÚJ GOMB: Színátmenetes (Gradient) */}
-          <button 
-            type="submit" 
-            className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-4 rounded-xl transition transform hover:scale-[1.02] shadow-lg shadow-purple-200 mt-2"
+          <Button
+            type="submit"
+            className="w-full py-4 text-base font-bold shadow-lg shadow-purple-200 mt-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 border-none text-white"
           >
             Fiók Létrehozása
-          </button>
+          </Button>
+
         </form>
 
         <p className="text-gray-500 text-center mt-8 text-sm">
