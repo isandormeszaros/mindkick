@@ -30,7 +30,7 @@ function Hero() {
             </p>
 
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4">
-              {/* Használjuk a saját Button komponensünket! */}
+              
               <Button 
                 to="/quiz" 
                 className="px-8 py-4 text-base w-full sm:w-auto flex items-center gap-2"
