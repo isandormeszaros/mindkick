@@ -57,7 +57,7 @@ function Navbar() {
             <div className={`lg:hidden absolute top-full left-0 w-full bg-white border-b border-gray-100 shadow-xl overflow-hidden transition-all duration-500 ease-in-out ${open ? "max-h-[80vh] opacity-100" : "max-h-0 opacity-0"}`}>
                 <div className="px-6 py-8 flex flex-col gap-4 items-center">
                     <NavLink to="/" className={mobileNavLinkStyle} onClick={closeMenu}>Játék</NavLink>
-                    <NavLink to="/quiz" className={navLinkStyle}>Quizek</NavLink>
+                    <NavLink to="/quiz" className={mobileNavLinkStyle}>Quizek</NavLink>
                     <NavLink to="/leaderboard" className={mobileNavLinkStyle} onClick={closeMenu}>Ranglista</NavLink>
                     <NavLink to="/gamesession" className={mobileNavLinkStyle} onClick={closeMenu}>Játékmenet</NavLink>
                     <NavLink to="/playwithfriends" className={mobileNavLinkStyle} onClick={closeMenu}>Játék barátok ellen</NavLink>

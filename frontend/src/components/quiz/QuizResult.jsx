@@ -1,11 +1,32 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Confetti from "react-confetti";
 
 const QuizResult = ({ result, questions, userAnswers, onRetry, onNavigateNext }) => {
   const [showDetails, setShowDetails] = useState(false);
+  const [windowSize, setWindowSize] = useState({ width: window.innerWidth, height: window.innerHeight });
+
+  useEffect(() => {
+    const handleResize = () => setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const isSuccess = result.percentage >= 50;
 
   return (
     <div className="max-w-2xl mx-auto bg-white p-8 rounded-3xl shadow-xl mt-10 border border-gray-100">
       
+{isSuccess && (
+        <Confetti 
+          width={windowSize.width} 
+          height={windowSize.height} 
+          recycle={false}      
+          numberOfPieces={500} 
+          gravity={0.15}
+          style={{ position: 'fixed', top: 0, left: 0, zIndex: 50 }} 
+        />
+      )}
+
       {/* Eredmény Kör */}
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-6 text-gray-800">Eredmény</h2>

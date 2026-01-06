@@ -20,10 +20,10 @@ const QuizGame = () => {
 
   const getTimeByDifficulty = (difficulty) => {
     switch (difficulty) {
-      case 'easy': return 30;
-      case 'medium': return 15;
-      case 'hard': return 10;
-      default: return 20;
+      case 'easy': return 10;
+      case 'medium': return 20;
+      case 'hard': return 30;
+      default: return 15;
     }
   };
 
