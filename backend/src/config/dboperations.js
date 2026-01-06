@@ -73,16 +73,23 @@ async function getQuizById(id) {
 async function submitQuiz(quizId, userId, answers) {
   let score = 0;
   let total = answers.length;
+  let details = {};
 
   const checkPromises = answers.map((ans) => {
     return new Promise((resolve, reject) => {
       pool.query(
-        "SELECT is_correct FROM options WHERE id = ? AND question_id = ?",
-        [ans.selectedOptionId, ans.questionId],
+        "SELECT id, is_correct FROM options WHERE question_id = ?",
+        [ans.questionId],
         (error, results) => {
           if (error) return reject(error);
 
-          const isCorrect = results.length > 0 && results[0].is_correct === 1;
+          const correctOption = results.find((opt) => opt.is_correct === 1);
+
+          if (correctOption) {
+            details[ans.questionId] = correctOption.id;
+          }
+
+          const isCorrect = correctOption && (ans.selectedOptionId === correctOption.id);
           if (isCorrect) score++;
 
           if (userId) {
@@ -123,11 +130,32 @@ async function submitQuiz(quizId, userId, answers) {
     });
   }
 
+  const recommendedQuiz = await new Promise((resolve) => {
+    const q = `
+      SELECT id, title, difficulty 
+      FROM quizzes 
+      WHERE id != ? AND is_published = 1 
+      ORDER BY RAND() 
+      LIMIT 1
+    `;
+    
+    pool.query(q, [quizId], (err, rows) => {
+      if (err) {
+        console.log("Recommendation error:", err);
+        // Ha itt hiba van, NULL értékkel tér vissza, hogy ne crasheljen ki a játék.
+        return resolve(null);
+      }
+      resolve(rows.length > 0 ? rows[0] : null);
+    });
+  });
+
   return {
     success: true,
     score: score,
     total: total,
     percentage: Math.round((score / total) * 100),
+    recommendedQuiz: recommendedQuiz,
+    evaluation: details,
   };
 }
 
