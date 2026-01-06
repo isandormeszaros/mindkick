@@ -10,15 +10,14 @@ const Profile = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-     
       const token = localStorage.getItem('token');
       
       if (!token) {
         navigate('/login'); 
+        return; // Fontos, hogy itt megállítsuk a futást
       }
 
       try {
-
         const res = await axios.get('http://localhost:8000/api/users/profile', {
           headers: {
             Authorization: `Bearer ${token}` 
@@ -37,13 +36,15 @@ const Profile = () => {
     fetchData();
   }, [navigate]);
 
-  
   if (loading) return <div className="p-10 text-white text-center">Betöltés...</div>;
-  
-  
   if (error) return <div className="p-10 text-red-500 text-center">{error}</div>;
 
- 
+  // Kijelentkezés függvény kiszervezve (tisztább kód)
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-white p-10 flex flex-col items-center">
       <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md text-center">
@@ -62,9 +63,7 @@ const Profile = () => {
         </div>
 
         <button 
-          onClick={() => {
-            localStorage.removeItem('token'); 
-          }}
+          onClick={handleLogout}
           className="mt-8 bg-red-600 hover:bg-red-700 text-white py-2 px-6 rounded transition"
         >
           Kijelentkezés

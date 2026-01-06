@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import Button from "../components/ui/Button";
+import AuthService from "../services/authService"; // <--- Service importálása
 
 const Register = () => {
-  const [formData, setFormData] = useState({
+  const [credentials, setCredentials] = useState({
     username: "",
     email: "",
     password: ""
@@ -12,27 +13,32 @@ const Register = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const { username, email, password } = formData;
+  const { username, email, password } = credentials;
 
   const onChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setCredentials({ ...credentials, [e.target.name]: e.target.value });
 
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:8000/api/auth/register", formData);
-      localStorage.setItem("token", res.data.token);
-      navigate("/profile");
+      // Regisztráció hívása
+      await AuthService.register(username, email, password);
+      
+      // Sikerüzenet (most már működni fog a toast, mert telepítettük)
+      toast.success("Sikeres regisztráció! Most jelentkezz be.");
+      
+      // Átirányítás a bejelentkezéshez
+      navigate("/login"); 
     } catch (err) {
-      setError(err.response?.data?.msg || "Hiba történt a regisztrációkor.");
+      const errorMessage = err.response?.data?.msg || "Hiba történt a regisztrációkor.";
+      setError(errorMessage);
+      toast.error(errorMessage);
     }
   };
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center pt-20">
-      
       <div className="bg-white p-10 rounded-2xl shadow-2xl w-full max-w-md border border-purple-100 relative overflow-hidden">
-        
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-24 bg-purple-50 blur-3xl rounded-full -z-10"></div>
 
         <h1 className="text-4xl font-extrabold mb-8 text-center text-purple-900">
@@ -88,7 +94,6 @@ const Register = () => {
           >
             Fiók Létrehozása
           </Button>
-
         </form>
 
         <p className="text-gray-500 text-center mt-8 text-sm">
