@@ -1,8 +1,8 @@
 import http from "../../http-common";
 
 // GET ALL QUIZZES
-const getAll = () => {
-  return http.get("/quiz/");
+const getAll = (search = "", category = "") => {
+  return http.get(`/quiz?search=${search}&category=${category}`);
 };
 
 // GET QUIZ BY ID
