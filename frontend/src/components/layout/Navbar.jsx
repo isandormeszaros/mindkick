@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { HiMenu, HiX } from "react-icons/hi";
-import Logo from '../../../public/brain.svg';
+import Logo from '../../../src/img/brain.svg';
 import Button from "../ui/Button";
 
 function Navbar() {
@@ -21,7 +21,7 @@ function Navbar() {
 
                 <Link to="/" className="flex items-center gap-2 group" onClick={closeMenu}>
                     <img src={Logo} alt="MindKick logo" className="w-10 h-10" />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 font-extrabold text-xl tracking-wide group-hover:brightness-110 transition-all">
+                    <span className="text-transparent bg-clip-text bg-linear-to-r from-pink-500 via-purple-500 to-blue-500 font-extrabold text-xl tracking-wide group-hover:brightness-110 transition-all">
                         MindKick
                     </span>
                 </Link>
@@ -38,7 +38,7 @@ function Navbar() {
                     <Button
                         to="/profile"
                         variant="primary"
-                        className="hidden md:inline-flex !hidden md:!inline-flex"
+                        className="hidden md:inline-flex"
                     >
 
                         Profilom
