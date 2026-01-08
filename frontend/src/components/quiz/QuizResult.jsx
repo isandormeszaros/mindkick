@@ -77,7 +77,7 @@ const QuizResult = ({ result, questions, userAnswers, onRetry, onNavigateNext })
             const isCorrect = userSelectedId === correctOptionId;
 
             return (
-              <div key={q.id} className={`p-4 rounded-xl border-l-4 shadow-sm ${isCorrect ? 'border-green-500 bg-green-50/50' : 'border-red-500 bg-red-50/50'}`}>
+              <div key={q.id} className={`p-4 rounded-xl border border-stone-200`}>
                 <p className="font-bold text-gray-800 mb-3 text-sm">
                   {index + 1}. {q.text}
                 </p>
