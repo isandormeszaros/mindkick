@@ -11,6 +11,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import Leaderboard from "./pages/Leaderboard";
+import CreateQuiz from "./pages/Admin/CreateQuiz";
+import AdminRoute from './pages/Admin/AdminRoute';
 
 function App() {
   return (
@@ -24,6 +26,9 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
           {/* <Route path="/leaderboard" element={<Leaderboard />} /> */}
+          <Route element={<AdminRoute />}>
+        <Route path="/create" element={<CreateQuiz />} />
+      </Route>
           <Route path="/quiz/:id" element={<QuizGame />} />
         </Routes>
       </div>

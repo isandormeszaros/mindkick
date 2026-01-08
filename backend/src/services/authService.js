@@ -47,7 +47,7 @@ export const loginUserService = async (email, password) => {
     }
 
     const token = jwt.sign(
-        { id: user.id, role: user.role || 'user' },
+        { id: user.id, role: user.role },
         process.env.JWT_SECRET || 'titkos_kulcs_fejleszteshez', 
         { expiresIn: '1d' }
     );

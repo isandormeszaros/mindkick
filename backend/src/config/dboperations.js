@@ -159,8 +159,57 @@ async function submitQuiz(quizId, userId, answers) {
   };
 }
 
+async function createFullQuiz(quizData) {
+  const promisePool = pool.promise();
+  const connection = await promisePool.getConnection();
+
+  try {
+    await connection.beginTransaction();
+
+    const [quizResult] = await connection.query(
+      `INSERT INTO quizzes (title, description, category_id, difficulty, is_published, created_by) 
+       VALUES (?, ?, ?, ?, ?, ?)`,
+      [quizData.title, quizData.description, quizData.category_id, quizData.difficulty, 1, quizData.userId]
+    );
+    const quizId = quizResult.insertId;
+
+    for (let i = 0; i < quizData.questions.length; i++) {
+      const q = quizData.questions[i];
+
+      const [questionResult] = await connection.query(
+        `INSERT INTO questions (category_id, question_text, difficulty) VALUES (?, ?, ?)`,
+        [quizData.category_id, q.text, quizData.difficulty] 
+      );
+      const questionId = questionResult.insertId;
+
+      await connection.query(
+        `INSERT INTO quiz_questions (quiz_id, question_id, order_index) VALUES (?, ?, ?)`,
+        [quizId, questionId, i + 1]
+      );
+
+      for (const opt of q.options) {
+        await connection.query(
+          `INSERT INTO options (question_id, option_text, is_correct) VALUES (?, ?, ?)`,
+          [questionId, opt.text, opt.isCorrect ? 1 : 0]
+        );
+      }
+    }
+
+    await connection.commit(); 
+    return { success: true, quizId: quizId, message: "Kvíz sikeresen létrehozva!" };
+
+  } catch (error) {
+    await connection.rollback(); // Hibánál, visszavonunk mindent
+    console.error("Transaction Error:", error);
+    throw error;
+  } finally {
+    connection.release(); 
+  }
+}
+
 export default {
   getQuizzes,
   getQuizById,
   submitQuiz,
+  createFullQuiz,
 };

@@ -12,3 +12,11 @@ export const authenticateToken = (req, res, next) => {
         next();
     });
 };
+
+export const isAdmin = (req, res, next) => {
+    if (req.user && req.user.role === 'admin') {
+        next();
+    } else {
+        return res.status(403).json({ error: "Hozzáférés megtagadva! Ehhez admin jogosultság szükséges." });
+    }
+};

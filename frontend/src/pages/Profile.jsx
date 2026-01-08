@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Profile = () => {
   const [user, setUser] = useState(null);       
@@ -10,7 +10,15 @@ const Profile = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const token = localStorage.getItem('token');
+      const userString = localStorage.getItem('user');
+      
+      if (!userString) {
+        navigate('/login'); 
+        return;
+      }
+
+      const userObj = JSON.parse(userString);
+      const token = userObj.token;
       
       if (!token) {
         navigate('/login'); 
@@ -39,7 +47,6 @@ const Profile = () => {
   if (loading) return <div className="p-10 text-white text-center">Betöltés...</div>;
   if (error) return <div className="p-10 text-red-500 text-center">{error}</div>;
 
-  // Kijelentkezés függvény kiszervezve (tisztább kód)
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/login');

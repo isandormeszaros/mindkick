@@ -20,7 +20,11 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await axios.post("http://localhost:8000/api/auth/login", formData);
-      localStorage.setItem("token", res.data.token);
+      const userData = {
+        token: res.data.token,
+        ...res.data.user
+      };
+      localStorage.setItem("user", JSON.stringify(userData));
       navigate("/profile");
     } catch (err) {
       setError(err.response?.data?.msg || "Hiba történt a bejelentkezéskor");

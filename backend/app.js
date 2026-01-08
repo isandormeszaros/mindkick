@@ -3,6 +3,7 @@ import cors from "cors";
 import quizRouter from "./src/routes/quizRouter.js";
 import userRoutes from "./src/routes/userRoutes.js";
 import authRoutes from "./src/routes/authRoutes.js";
+import quizRoutes from "./src/routes/quizRouter.js";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use("/quiz", quizRouter);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api", quizRoutes);
 
 app.use((err, req, res, next) => {
   console.error("SERVER ERROR:", err);

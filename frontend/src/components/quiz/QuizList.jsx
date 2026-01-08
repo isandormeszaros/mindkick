@@ -86,9 +86,8 @@ const QuizList = () => {
             </div>
           ))
         ) : (
-          /* Ez jelenik meg, ha nincs találat */
           <div className="col-span-full text-center py-12 text-gray-500">
-            Nincs ilyen nehézségű kvíz. 😕
+            Nincs ilyen nehézségű kvíz.
           </div>
         )}
       </div>
