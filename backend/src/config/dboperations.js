@@ -207,9 +207,19 @@ async function createFullQuiz(quizData) {
   }
 }
 
+async function deleteQuiz(id) {
+  return new Promise((resolve, reject) => {
+    pool.query("DELETE FROM quizzes WHERE id = ?", [id], (error, result) => {
+      if (error) return reject(error);
+      return resolve(result);
+    });
+  });
+}
+
 export default {
   getQuizzes,
   getQuizById,
   submitQuiz,
   createFullQuiz,
+  deleteQuiz
 };

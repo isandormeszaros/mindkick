@@ -61,4 +61,15 @@ router.post("/create",
   }
 );
 
+// TÖRLÉS VÉGPONT
+router.delete("/delete/:id", authenticateToken, isAdmin, async (req, res) => {
+  try {
+    await db.deleteQuiz(req.params.id);
+    res.json({ message: "Kvíz törölve" });
+  } catch (error) {
+    console.error("Delete error:", error);
+    res.status(500).json({ error: "Nem sikerült törölni (SQL Hiba)" });
+  }
+});
+
 export default router;

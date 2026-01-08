@@ -20,7 +20,7 @@ const CreateQuiz = () => {
   return (
     <div className="max-w-4xl mx-auto p-6 bg-gray-50 min-h-screen">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-extrabold text-gray-900">Új Kvíz 🛠️</h1>
+        <h1 className="text-3xl font-extrabold text-gray-900">Új Kvíz</h1>
         <Button to="/" className="bg-gray-500 text-xs px-4 py-2">Mégse</Button>
       </div>
 
