@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import QuizService from "../../services/QuizService";
+import Button from "../ui/Button";
 
 const QuizList = () => {
   const [quizzes, setQuizzes] = useState([]);
@@ -25,8 +26,13 @@ const QuizList = () => {
     return 'bg-red-100 text-red-800';
   };
 
+  console.log(quizzes)
+  
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="md:container md:mx-auto">
+
+    
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 m-6">
       {quizzes.map((q) => (
         <div key={q.id} className="bg-white p-6 rounded-2xl shadow-sm hover:shadow-md transition duration-300 border border-gray-100">
           <div className="flex justify-between items-start mb-4">
@@ -41,14 +47,17 @@ const QuizList = () => {
           <h2 className="text-2xl font-bold mb-3 text-gray-800">{q.title}</h2>
           <p className="text-gray-600 mb-6 text-sm line-clamp-2">{q.description}</p>
           
-          <Link 
-            to={`/quiz/${q.id}`}
-            className="block w-full text-center bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition"
-          >
-            Indítás
-          </Link>
+        <div className="mt-auto pt-6 border-t border-gray-100">
+                  <Button 
+                    to={`/quiz/${q.id}`} 
+                    className="w-full shadow-md hover:shadow-lg"
+                  >
+                    Indítás
+                  </Button>
+                </div>
         </div>
       ))}
+    </div>
     </div>
   );
 };
