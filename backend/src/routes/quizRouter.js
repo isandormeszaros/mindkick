@@ -30,9 +30,10 @@ router.get("/:id", (req, res) => {
     .catch((error) => res.status(500).send(error));
 });
 
-router.post("/:id/submit", (req, res) => {
+router.post("/:id/submit", authenticateToken, (req, res) => {
   let quizId = req.params.id;
-  let { userId, answers } = req.body;
+  let userId = req.user.id; 
+  let { answers } = req.body;
 
   if (!answers || !answers.length) {
     return res.status(400).send("No answers provided");

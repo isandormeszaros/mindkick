@@ -117,14 +117,28 @@ async function submitQuiz(quizId, userId, answers) {
 
   await Promise.all(checkPromises);
 
-  if (userId) {
+if (userId) {
     await new Promise((resolve, reject) => {
       pool.query(
         "INSERT INTO results (user_id, quiz_id, score, total_questions) VALUES (?, ?, ?, ?)",
         [userId, quizId, score, total],
         (error) => {
           if (error) return reject(error);
-          resolve();
+
+          const updateStatsQuery = `
+            INSERT INTO user_stats (user_id, total_score, quizzes_completed, last_quiz_at)
+            VALUES (?, ?, 1, NOW())
+            ON DUPLICATE KEY UPDATE
+              total_score = total_score + VALUES(total_score),
+              quizzes_completed = quizzes_completed + 1,
+              last_quiz_at = NOW()
+          `;
+
+          pool.query(updateStatsQuery, [userId, score], (statErr) => {
+            if (statErr) console.error("STAT UPDATE ERROR:", statErr);
+            resolve();
+          });
+          // -----------------------------------------------------------
         }
       );
     });
@@ -246,5 +260,5 @@ export default {
   createFullQuiz,
   deleteQuiz,
   getLeaderboard,
-  
+
 };
