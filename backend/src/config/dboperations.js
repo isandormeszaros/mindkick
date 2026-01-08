@@ -216,10 +216,35 @@ async function deleteQuiz(id) {
   });
 }
 
+async function getLeaderboard() {
+  return new Promise((resolve, reject) => {
+    const q = `
+      SELECT 
+        u.username, 
+        u.display_name, 
+        u.avatar_url, 
+        s.total_score, 
+        s.quizzes_completed 
+      FROM user_stats s
+      JOIN users u ON s.user_id = u.id
+      ORDER BY s.total_score DESC
+      LIMIT 50
+    `;
+    pool.query(q, (error, elements) => {
+      if (error) {
+        return reject(error);
+      }
+      return resolve(elements);
+    });
+  });
+}
+
 export default {
   getQuizzes,
   getQuizById,
   submitQuiz,
   createFullQuiz,
-  deleteQuiz
+  deleteQuiz,
+  getLeaderboard,
+  
 };

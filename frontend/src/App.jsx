@@ -4,13 +4,12 @@ import Navbar from "./components/layout/Navbar";
 import Home from "./pages/Home";
 import QuizList from "./components/quiz/QuizList";
 import QuizGame from "./components/quiz/QuizGame";
+import Leaderboard from "./pages//Leaderboard/Leaderboard";
 // import QuizList from "./pages/QuizList";
-// import Leaderboard from "./pages/Leaderboard";
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
-import Leaderboard from "./pages/Leaderboard";
 import CreateQuiz from "./pages/Admin/CreateQuiz";
 import AdminRoute from './pages/Admin/AdminRoute';
 
@@ -25,7 +24,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
-          {/* <Route path="/leaderboard" element={<Leaderboard />} /> */}
+          <Route path="/leaderboard" element={<Leaderboard />} />
           <Route element={<AdminRoute />}>
         <Route path="/create" element={<CreateQuiz />} />
       </Route>

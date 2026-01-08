@@ -15,10 +15,15 @@ const submit = (id, data) => {
   return http.post(`/quiz/${id}/submit`, data);
 };
 
+const getLeaderboard = () => {
+  return http.get(`/quiz/leaderboard`);
+};
+
 const QuizService = {
   getAll,
   getById,
   submit,
+  getLeaderboard
 };
 
 export default QuizService;
