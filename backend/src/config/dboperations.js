@@ -117,14 +117,28 @@ async function submitQuiz(quizId, userId, answers) {
 
   await Promise.all(checkPromises);
 
-  if (userId) {
+if (userId) {
     await new Promise((resolve, reject) => {
       pool.query(
         "INSERT INTO results (user_id, quiz_id, score, total_questions) VALUES (?, ?, ?, ?)",
         [userId, quizId, score, total],
         (error) => {
           if (error) return reject(error);
-          resolve();
+
+          const updateStatsQuery = `
+            INSERT INTO user_stats (user_id, total_score, quizzes_completed, last_quiz_at)
+            VALUES (?, ?, 1, NOW())
+            ON DUPLICATE KEY UPDATE
+              total_score = total_score + VALUES(total_score),
+              quizzes_completed = quizzes_completed + 1,
+              last_quiz_at = NOW()
+          `;
+
+          pool.query(updateStatsQuery, [userId, score], (statErr) => {
+            if (statErr) console.error("STAT UPDATE ERROR:", statErr);
+            resolve();
+          });
+          // -----------------------------------------------------------
         }
       );
     });
@@ -216,10 +230,35 @@ async function deleteQuiz(id) {
   });
 }
 
+async function getLeaderboard() {
+  return new Promise((resolve, reject) => {
+    const q = `
+      SELECT 
+        u.username, 
+        u.display_name, 
+        u.avatar_url, 
+        s.total_score, 
+        s.quizzes_completed 
+      FROM user_stats s
+      JOIN users u ON s.user_id = u.id
+      ORDER BY s.total_score DESC
+      LIMIT 50
+    `;
+    pool.query(q, (error, elements) => {
+      if (error) {
+        return reject(error);
+      }
+      return resolve(elements);
+    });
+  });
+}
+
 export default {
   getQuizzes,
   getQuizById,
   submitQuiz,
   createFullQuiz,
-  deleteQuiz
+  deleteQuiz,
+  getLeaderboard,
+
 };

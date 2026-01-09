@@ -11,14 +11,19 @@ const getById = (id) => {
 };
 
 // SUBMIT QUIZ
-const submit = (id, data) => {
-  return http.post(`/quiz/${id}/submit`, data);
+const submit = (id, data, config) => {
+  return http.post(`/quiz/${id}/submit`, data, config);
+};
+
+const getLeaderboard = () => {
+  return http.get(`/quiz/leaderboard`);
 };
 
 const QuizService = {
   getAll,
   getById,
   submit,
+  getLeaderboard
 };
 
 export default QuizService;

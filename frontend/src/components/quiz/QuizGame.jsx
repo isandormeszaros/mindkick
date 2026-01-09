@@ -106,13 +106,33 @@ const QuizGame = () => {
   };
 
   const submitQuiz = (finalAnswers) => {
-    const data = { userId: 1, answers: finalAnswers };
-    QuizService.submit(id, data)
+    const userString = localStorage.getItem('user');
+    const user = userString ? JSON.parse(userString) : null;
+
+    const data = { 
+      answers: finalAnswers 
+    };
+    
+    let config = {};
+    if (user && user.token) {
+      config = {
+        headers: { 
+          Authorization: `Bearer ${user.token}` 
+        }
+      };
+    }
+
+    QuizService.submit(id, data, config)
       .then(response => {
         setResult(response.data);
         localStorage.removeItem(STORAGE_KEY);
       })
-      .catch(e => console.log(e));
+      .catch(e => {
+        console.error(e);
+        if(e.response && e.response.status === 401 || e.response.status === 403) {
+            alert("Lejárt a bejelentkezésed! Kérlek lépj be újra.");
+        }
+      });
   };
 
   useEffect(() => {
