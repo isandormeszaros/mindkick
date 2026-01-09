@@ -20,7 +20,11 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await axios.post("http://localhost:8000/api/auth/login", formData);
-      localStorage.setItem("token", res.data.token);
+      const userData = {
+        token: res.data.token,
+        ...res.data.user
+      };
+      localStorage.setItem("user", JSON.stringify(userData));
       navigate("/profile");
     } catch (err) {
       setError(err.response?.data?.msg || "Hiba történt a bejelentkezéskor");
@@ -73,7 +77,7 @@ const Login = () => {
           
           <Button
             type="submit"
-            className="w-full py-4 text-base font-bold shadow-lg shadow-purple-200 mt-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 border-none text-white"
+            className="w-full py-4 text-base font-bold shadow-lg shadow-purple-200 mt-2 bg-linear-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 border-none text-white"
           >
             Belépés
           </Button>

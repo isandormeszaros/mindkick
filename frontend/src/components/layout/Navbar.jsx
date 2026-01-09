@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { HiMenu, HiX } from "react-icons/hi";
-import Logo from '../../../public/brain.svg';
+import Logo from '../../../src/img/brain.svg';
 import Button from "../ui/Button";
 
 function Navbar() {
@@ -21,7 +21,7 @@ function Navbar() {
 
                 <Link to="/" className="flex items-center gap-2 group" onClick={closeMenu}>
                     <img src={Logo} alt="MindKick logo" className="w-10 h-10" />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 font-extrabold text-xl tracking-wide group-hover:brightness-110 transition-all">
+                    <span className="text-transparent bg-clip-text bg-linear-to-r from-pink-500 via-purple-500 to-blue-500 font-extrabold text-xl tracking-wide group-hover:brightness-110 transition-all">
                         MindKick
                     </span>
                 </Link>
@@ -38,7 +38,7 @@ function Navbar() {
                     <Button
                         to="/profile"
                         variant="primary"
-                        className="hidden md:inline-flex !hidden md:!inline-flex"
+                        className="hidden md:inline-flex"
                     >
 
                         Profilom
@@ -57,7 +57,7 @@ function Navbar() {
             <div className={`lg:hidden absolute top-full left-0 w-full bg-white border-b border-gray-100 shadow-xl overflow-hidden transition-all duration-500 ease-in-out ${open ? "max-h-[80vh] opacity-100" : "max-h-0 opacity-0"}`}>
                 <div className="px-6 py-8 flex flex-col gap-4 items-center">
                     <NavLink to="/" className={mobileNavLinkStyle} onClick={closeMenu}>Játék</NavLink>
-                    <NavLink to="/quiz" className={mobileNavLinkStyle}>Quizek</NavLink>
+                    <NavLink to="/quiz" className={mobileNavLinkStyle} onClick={closeMenu}>Quizek</NavLink>
                     <NavLink to="/leaderboard" className={mobileNavLinkStyle} onClick={closeMenu}>Ranglista</NavLink>
                     <NavLink to="/gamesession" className={mobileNavLinkStyle} onClick={closeMenu}>Játékmenet</NavLink>
                     <NavLink to="/playwithfriends" className={mobileNavLinkStyle} onClick={closeMenu}>Játék barátok ellen</NavLink>

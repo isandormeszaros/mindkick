@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
-import Logo from '../../../public/brain.svg';
+import Logo from '../../../src/img/brain.svg';
 
 function Footer() {
   const linkStyle = "text-purple-200/80 hover:text-white transition-colors duration-300";
 
   return (
-    <footer className="bg-gradient-to-br from-[#3b0764] via-[#831843] to-[#1e3a8a] text-white pt-20 pb-10 relative overflow-hidden">
-      <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent pointer-events-none"></div>
+    <footer className="bg-linear-to-br from-[#3b0764] via-[#831843] to-[#1e3a8a] text-white pt-20 pb-10 relative overflow-hidden">
+      <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-white via-transparent to-transparent pointer-events-none"></div>
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
           <div className="col-span-1 md:col-span-2">
