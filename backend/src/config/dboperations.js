@@ -136,9 +136,10 @@ if (userId) {
 
           pool.query(updateStatsQuery, [userId, score], (statErr) => {
             if (statErr) console.error("STAT UPDATE ERROR:", statErr);
+            checkAndAwardBadges(userId);
             resolve();
           });
-          // -----------------------------------------------------------
+        
         }
       );
     });
@@ -156,7 +157,7 @@ if (userId) {
     pool.query(q, [quizId], (err, rows) => {
       if (err) {
         console.log("Recommendation error:", err);
-        // Ha itt hiba van, NULL értékkel tér vissza, hogy ne crasheljen ki a játék.
+       
         return resolve(null);
       }
       resolve(rows.length > 0 ? rows[0] : null);
@@ -213,7 +214,7 @@ async function createFullQuiz(quizData) {
     return { success: true, quizId: quizId, message: "Kvíz sikeresen létrehozva!" };
 
   } catch (error) {
-    await connection.rollback(); // Hibánál, visszavonunk mindent
+    await connection.rollback(); 
     console.error("Transaction Error:", error);
     throw error;
   } finally {
@@ -253,6 +254,67 @@ async function getLeaderboard() {
   });
 }
 
+// --- ÚJ FUNKCIÓK A PROFILHOZ ÉS STATISZTIKÁHOZ ---
+
+// 1. Minden profiladat lekérése egyben
+async function getUserProfileData(userId) {
+  return new Promise((resolve, reject) => {
+  
+    const q = `
+      SELECT 
+        s.total_score, 
+        s.quizzes_completed, 
+        s.current_streak,
+        (SELECT COUNT(*) FROM results WHERE user_id = ? AND score = total_questions) as perfect_quizzes,
+        u.username, u.display_name, u.avatar_url, u.created_at
+      FROM user_stats s
+      JOIN users u ON s.user_id = u.id
+      WHERE s.user_id = ?
+    `;
+
+    pool.query(q, [userId, userId], (error, results) => {
+      if (error) return reject(error);
+      
+      const stats = results[0] || { 
+        total_score: 0, quizzes_completed: 0, current_streak: 0, 
+        perfect_quizzes: 0, username: 'Ismeretlen' 
+      };
+
+      // Megszerzett jelvények lekérése 
+      const badgeQuery = `
+        SELECT b.name, b.icon, b.description, b.code 
+        FROM user_badges ub
+        JOIN badges b ON ub.badge_id = b.id
+        WHERE ub.user_id = ?
+      `;
+
+      pool.query(badgeQuery, [userId], (badgeErr, badgeResults) => {
+        if (badgeErr) return reject(badgeErr);
+        
+        resolve({
+          stats: stats,
+          badges: badgeResults
+        });
+      });
+    });
+  });
+}
+
+// 2. Automatikus badge kiosztás
+async function checkAndAwardBadges(userId) {
+  const promisePool = pool.promise();
+ 
+  await promisePool.query(`
+    INSERT IGNORE INTO user_badges (user_id, badge_id)
+    SELECT user_id, 1 FROM user_stats WHERE user_id = ? AND quizzes_completed >= 1
+  `, [userId]);
+
+  await promisePool.query(`
+    INSERT IGNORE INTO user_badges (user_id, badge_id)
+    SELECT DISTINCT user_id, 2 FROM results WHERE user_id = ? AND score = total_questions
+  `, [userId]);
+}
+
 export default {
   getQuizzes,
   getQuizById,
@@ -260,5 +322,6 @@ export default {
   createFullQuiz,
   deleteQuiz,
   getLeaderboard,
-
+  getUserProfileData,
+  checkAndAwardBadges
 };
