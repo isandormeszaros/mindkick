@@ -21,23 +21,22 @@ const Login = () => {
     try {
       const res = await axios.post("http://localhost:8000/api/auth/login", formData);
       
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user)); 
+      // FONTOS JAVÍTÁS:
+      // Egyetlen objektumba mentjük el az adatokat (token + user info), 
+      // mert a Profile.jsx innen keresi majd a tokent.
+      localStorage.setItem("user", JSON.stringify(res.data)); 
 
       navigate("/profile");
     } catch (err) {
       console.error(err);
-      setError(err.response?.data?.msg || "Hiba történt a bejelentkezéskor");
+      // Itt a backend 'error' kulcsot küld, így azt jelenítjük meg
+      setError(err.response?.data?.error || "Hiba történt a bejelentkezéskor");
     }
   };
 
   return (
- 
     <div className="min-h-screen bg-white flex items-center justify-center pt-20">
-      
-   
       <div className="bg-white p-10 rounded-2xl shadow-2xl w-full max-w-md border border-purple-100 relative overflow-hidden">
-        
         
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-24 bg-purple-50 blur-3xl rounded-full -z-10"></div>
 
@@ -56,7 +55,6 @@ const Login = () => {
               name="email"
               value={email}
               onChange={onChange}
-           
               className="w-full p-4 rounded-xl bg-purple-50 border border-purple-200 text-gray-900 placeholder-purple-300 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition"
               required
             />

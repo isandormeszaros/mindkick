@@ -15,7 +15,7 @@ const executeQuery = (query, params) => {
 };
 
 export const registerUserService = async (username, email, password) => {
-  
+    // 1. Ellenőrzés, hogy létezik-e már
     const checkQuery = "SELECT * FROM users WHERE email = ? OR username = ?";
     const existingUser = await executeQuery(checkQuery, [email, username]);
 
@@ -23,15 +23,37 @@ export const registerUserService = async (username, email, password) => {
         throw new Error("USER_EXISTS");
     }
 
+    // 2. Jelszó titkosítása
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    // 3. Mentés az adatbázisba
     const insertQuery = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
-    return await executeQuery(insertQuery, [username, email, hashedPassword]);
+    const result = await executeQuery(insertQuery, [username, email, hashedPassword]);
+    
+    // 4. Az új felhasználó azonosítójának lekérése
+    const userId = result.insertId;
+
+    // 5. TOKEN generálása (ugyanaz a logika, mint a login-nál)
+    const token = jwt.sign(
+        { id: userId, role: 'user' }, 
+        process.env.JWT_SECRET || 'titkos_kulcs_fejleszteshez', 
+        { expiresIn: '1d' }
+    );
+
+    // 6. Visszaadjuk a tokent és a felhasználó adatait
+    return {
+        token,
+        user: {
+            id: userId,
+            username: username,
+            email: email,
+            role: 'user'
+        }
+    };
 };
 
 export const loginUserService = async (email, password) => {
-
     const query = "SELECT * FROM users WHERE email = ?";
     const users = await executeQuery(query, [email]);
 

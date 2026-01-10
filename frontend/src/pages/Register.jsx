@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Button from "../components/ui/Button";
-import AuthService from "../services/authService"; // <--- Service importálása
+import AuthService from "../services/authService";
 
 const Register = () => {
   const [credentials, setCredentials] = useState({
@@ -21,16 +21,19 @@ const Register = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Regisztráció hívása
-      await AuthService.register(username, email, password);
+      // 1. Regisztráció hívása - elmentjük a választ (res)
+      const res = await AuthService.register(username, email, password);
       
-      // Sikerüzenet (most már működni fog a toast, mert telepítettük)
-      toast.success("Sikeres regisztráció! Most jelentkezz be.");
+      // 2. ADATOK MENTÉSE: A backendtől kapott { token, user } objektumot elmentjük
+      // Így a rendszer azonnal bejelentkezettnek látja a felhasználót
+      localStorage.setItem('user', JSON.stringify(res.data));
       
-      // Átirányítás a bejelentkezéshez
-      navigate("/login"); 
+      toast.success("Sikeres regisztráció és belépés!");
+      
+      // 3. ÁTIRÁNYÍTÁS: Azonnal a profil oldalra küldjük
+      navigate("/profile"); 
     } catch (err) {
-      const errorMessage = err.response?.data?.msg || "Hiba történt a regisztrációkor.";
+      const errorMessage = err.response?.data?.error || "Hiba történt a regisztrációkor.";
       setError(errorMessage);
       toast.error(errorMessage);
     }
@@ -39,6 +42,8 @@ const Register = () => {
   return (
     <div className="min-h-screen bg-white flex items-center justify-center pt-20">
       <div className="bg-white p-10 rounded-2xl shadow-2xl w-full max-w-md border border-purple-100 relative overflow-hidden">
+        
+        {/* Dekorációs háttér elem */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-24 bg-purple-50 blur-3xl rounded-full -z-10"></div>
 
         <h1 className="text-4xl font-extrabold mb-8 text-center text-purple-900">
@@ -56,7 +61,7 @@ const Register = () => {
               value={username}
               onChange={onChange}
               placeholder="Pl. Jatekos123"
-              className="w-full p-4 rounded-xl bg-purple-50 border border-purple-200 text-gray-900 placeholder-purple-300 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition"
+              className="w-full p-4 rounded-xl bg-purple-50 border border-purple-200 text-gray-900 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition"
               required
             />
           </div>
@@ -69,7 +74,7 @@ const Register = () => {
               value={email}
               onChange={onChange}
               placeholder="pelda@email.com"
-              className="w-full p-4 rounded-xl bg-purple-50 border border-purple-200 text-gray-900 placeholder-purple-300 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition"
+              className="w-full p-4 rounded-xl bg-purple-50 border border-purple-200 text-gray-900 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition"
               required
             />
           </div>
@@ -82,7 +87,7 @@ const Register = () => {
               value={password}
               onChange={onChange}
               placeholder="Minimum 6 karakter"
-              className="w-full p-4 rounded-xl bg-purple-50 border border-purple-200 text-gray-900 placeholder-purple-300 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition"
+              className="w-full p-4 rounded-xl bg-purple-50 border border-purple-200 text-gray-900 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition"
               required
               minLength="6"
             />
@@ -90,7 +95,7 @@ const Register = () => {
 
           <Button
             type="submit"
-            className="w-full py-4 text-base font-bold shadow-lg shadow-purple-200 mt-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 border-none text-white"
+            className="w-full py-4 text-base font-bold shadow-lg shadow-purple-200 mt-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 border-none text-white transition-all transform hover:scale-[1.02]"
           >
             Fiók Létrehozása
           </Button>
