@@ -3,7 +3,6 @@ import mysql from "mysql2";
 
 let pool = mysql.createPool(config);
 
-// GET /allquiz
 async function getQuizzes() {
   return new Promise((resolve, reject) => {
     const q = `
@@ -117,7 +116,7 @@ async function submitQuiz(quizId, userId, answers) {
 
   await Promise.all(checkPromises);
 
-if (userId) {
+  if (userId) {
     await new Promise((resolve, reject) => {
       pool.query(
         "INSERT INTO results (user_id, quiz_id, score, total_questions) VALUES (?, ?, ?, ?)",
@@ -136,9 +135,10 @@ if (userId) {
 
           pool.query(updateStatsQuery, [userId, score], (statErr) => {
             if (statErr) console.error("STAT UPDATE ERROR:", statErr);
+            checkAndAwardBadges(userId);
             resolve();
           });
-          // -----------------------------------------------------------
+
         }
       );
     });
@@ -152,11 +152,11 @@ if (userId) {
       ORDER BY RAND() 
       LIMIT 1
     `;
-    
+
     pool.query(q, [quizId], (err, rows) => {
       if (err) {
         console.log("Recommendation error:", err);
-        // Ha itt hiba van, NULL értékkel tér vissza, hogy ne crasheljen ki a játék.
+
         return resolve(null);
       }
       resolve(rows.length > 0 ? rows[0] : null);
@@ -192,7 +192,7 @@ async function createFullQuiz(quizData) {
 
       const [questionResult] = await connection.query(
         `INSERT INTO questions (category_id, question_text, difficulty) VALUES (?, ?, ?)`,
-        [quizData.category_id, q.text, quizData.difficulty] 
+        [quizData.category_id, q.text, quizData.difficulty]
       );
       const questionId = questionResult.insertId;
 
@@ -209,15 +209,15 @@ async function createFullQuiz(quizData) {
       }
     }
 
-    await connection.commit(); 
+    await connection.commit();
     return { success: true, quizId: quizId, message: "Kvíz sikeresen létrehozva!" };
 
   } catch (error) {
-    await connection.rollback(); // Hibánál, visszavonunk mindent
+    await connection.rollback();
     console.error("Transaction Error:", error);
     throw error;
   } finally {
-    connection.release(); 
+    connection.release();
   }
 }
 
@@ -253,6 +253,71 @@ async function getLeaderboard() {
   });
 }
 
+async function getUserProfileData(userId) {
+  return new Promise((resolve, reject) => {
+    const q = `
+      SELECT 
+        u.username, u.display_name, u.avatar_url,
+        IFNULL(s.total_score, 0) as total_score, 
+        IFNULL(s.quizzes_completed, 0) as quizzes_completed, 
+        IFNULL(s.current_streak, 0) as current_streak,
+        (SELECT COUNT(*) FROM results WHERE user_id = u.id AND score = total_questions) as perfect_quizzes
+      FROM users u
+      LEFT JOIN user_stats s ON u.id = s.user_id
+      WHERE u.id = ?
+    `;
+
+    pool.query(q, [userId], (error, results) => {
+      if (error) return reject(error);
+      if (results.length === 0) return resolve({ stats: { username: 'Ismeretlen' }, badges: [] });
+
+      const stats = results[0];
+      const badgeQuery = `SELECT b.name, b.icon, b.description FROM user_badges ub JOIN badges b ON ub.badge_id = b.id WHERE ub.user_id = ?`;
+
+      pool.query(badgeQuery, [userId], (badgeErr, badgeResults) => {
+        if (badgeErr) return reject(badgeErr);
+        resolve({ stats, badges: badgeResults });
+      });
+    });
+  });
+}
+async function getCategoryStatistics(userId) {
+  return new Promise((resolve, reject) => {
+    const q = `
+      SELECT 
+        c.name AS category_name,
+        ROUND(AVG(r.score / r.total_questions * 100), 0) AS average_score,
+        COUNT(r.id) AS total_attempts
+      FROM results r
+      JOIN quizzes q ON r.quiz_id = q.id
+      JOIN categories c ON q.category_id = c.id
+      WHERE r.user_id = ?
+      GROUP BY c.id
+      ORDER BY average_score DESC
+    `;
+
+    pool.query(q, [userId], (error, results) => {
+      if (error) return reject(error);
+      resolve(results);
+    });
+  });
+}
+
+async function checkAndAwardBadges(userId) {
+  const promisePool = pool.promise();
+
+  await promisePool.query(`
+    INSERT IGNORE INTO user_badges (user_id, badge_id)
+    SELECT user_id, 1 FROM user_stats WHERE user_id = ? AND quizzes_completed >= 1
+  `, [userId]);
+
+
+  await promisePool.query(`
+    INSERT IGNORE INTO user_badges (user_id, badge_id)
+    SELECT DISTINCT user_id, 2 FROM results WHERE user_id = ? AND score = total_questions
+  `, [userId]);
+}
+
 export default {
   getQuizzes,
   getQuizById,
@@ -260,5 +325,7 @@ export default {
   createFullQuiz,
   deleteQuiz,
   getLeaderboard,
-
+  getUserProfileData,
+  getCategoryStatistics, 
+  checkAndAwardBadges
 };
