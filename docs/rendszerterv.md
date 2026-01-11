@@ -54,6 +54,7 @@ A rendszer kiemelt célja a **reszponzív működés**, amely mobilon és asztal
 ---
 
 ## 3. Üzleti folyamatok modellje
+![Üzleti folyamatok modellje](/frontend/src/assets/images/business_logic.png)
 
 ### 3.1 Üzleti szereplők
 
@@ -159,7 +160,11 @@ Az adminisztrátor grafikus felületen hoz létre vagy töröl kvízeket. Törl�
 
 ---
 
-## 8. Adatbázis terv (vázlat)
+## 8. Adatbázis terv
+![Adatbázis modellje](/frontend/src/assets/images/db_layout.png)
+
+
+* **Fontosabb, használt táblák**
 
 * users
 * user_stats
