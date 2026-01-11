@@ -20,24 +20,23 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await axios.post("http://localhost:8000/api/auth/login", formData);
-      const userData = {
-        token: res.data.token,
-        ...res.data.user
-      };
-      localStorage.setItem("user", JSON.stringify(userData));
+      
+      // FONTOS JAVÍTÁS:
+      // Egyetlen objektumba mentjük el az adatokat (token + user info), 
+      // mert a Profile.jsx innen keresi majd a tokent.
+      localStorage.setItem("user", JSON.stringify(res.data)); 
+
       navigate("/profile");
     } catch (err) {
-      setError(err.response?.data?.msg || "Hiba történt a bejelentkezéskor");
+      console.error(err);
+      // Itt a backend 'error' kulcsot küld, így azt jelenítjük meg
+      setError(err.response?.data?.error || "Hiba történt a bejelentkezéskor");
     }
   };
 
   return (
- 
     <div className="min-h-screen bg-white flex items-center justify-center pt-20">
-      
-   
       <div className="bg-white p-10 rounded-2xl shadow-2xl w-full max-w-md border border-purple-100 relative overflow-hidden">
-        
         
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-24 bg-purple-50 blur-3xl rounded-full -z-10"></div>
 
@@ -56,7 +55,6 @@ const Login = () => {
               name="email"
               value={email}
               onChange={onChange}
-           
               className="w-full p-4 rounded-xl bg-purple-50 border border-purple-200 text-gray-900 placeholder-purple-300 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition"
               required
             />
@@ -77,7 +75,7 @@ const Login = () => {
           
           <Button
             type="submit"
-            className="w-full py-4 text-base font-bold shadow-lg shadow-purple-200 mt-2 bg-linear-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 border-none text-white"
+            className="w-full py-4 text-base font-bold shadow-lg shadow-purple-200 mt-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 border-none text-white"
           >
             Belépés
           </Button>

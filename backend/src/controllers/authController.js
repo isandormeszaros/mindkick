@@ -8,12 +8,18 @@ export const register = async (req, res) => {
             return res.status(400).json({ error: "Minden mező kitöltése kötelező!" });
         }
 
-        await registerUserService(username, email, password);
+        // 1. Regisztráljuk a felhasználót és visszakapjuk az adatait + tokent
+        // (Ehhez az authService.js-ben a registerUserService-nek is vissza kell térnie ezekkel)
+        const data = await registerUserService(username, email, password);
         
-        res.status(201).json({ message: "Sikeres regisztráció!" });
+        // 2. Azonnal visszaküldjük a tokent, így a frontend be tudja léptetni
+        res.status(201).json({ 
+            message: "Sikeres regisztráció!",
+            token: data.token,
+            user: data.user
+        });
 
     } catch (error) {
-        
         if (error.message === "USER_EXISTS") {
             return res.status(409).json({ error: "Ez a felhasználónév vagy email már foglalt!" });
         }
