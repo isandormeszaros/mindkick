@@ -178,6 +178,10 @@ Az adminisztrátor grafikus felületen hoz létre vagy töröl kvízeket. Törl�
 
 ## 9. Implementációs terv
 
+### Stack
+![Tech stack modellje](/frontend/src/assets/images/tech_stack.png)
+
+
 ### Frontend
 
 * Routing (App.js)

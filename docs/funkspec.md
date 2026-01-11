@@ -143,3 +143,12 @@ A felhasználói felület **komponens-alapú (React)**, egységes dizájnnal.
 | K08 | V1.0   | Mobilbarát működés   | Reszponzív UI, hamburger menü           |
 | K09 | V1.0   | Bővíthetőség         | Skálázható Node.js + MySQL architektúra |
 | K10 | V1.0   | Biztonság            | Bcrypt, védett API végpontok            |
+
+## 7. Képernyőtervek
+![Főodal](/frontend/src/assets/images/home.png)
+![Quizek](/frontend/src/assets/images/quizek.png)
+![Leaderboard](/frontend/src/assets/images/leaderboard.png)
+![Login](/frontend/src/assets/images/login.png)
+![Register](/frontend/src/assets/images/Register.png)
+![Running Quiz](/frontend/src/assets/images/running_quiz.png)
+![Result](/frontend/src/assets/images/result.png)

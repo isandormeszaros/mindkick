@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 const Profile = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,7 +31,7 @@ const Profile = () => {
   setLoading(false);
   navigate('/login');
 }
-
+}
     fetchData();
   }, [navigate]);
 
@@ -42,7 +41,7 @@ const Profile = () => {
   };
 
   if (loading) return <div className="min-h-screen bg-slate-50 flex items-center justify-center text-slate-500 font-medium animate-pulse">Profil betöltése...</div>;
-  if (error) return <div className="min-h-screen bg-slate-50 flex items-center justify-center text-red-500">{error}</div>;
+  if (!data) return null;
 
   const { stats, badges, categoryStats } = data;
 
