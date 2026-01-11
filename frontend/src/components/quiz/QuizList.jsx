@@ -64,7 +64,7 @@ const QuizList = () => {
 
   console.log("QuizList User:", user);
 
-  console.log(user.role == "admin")
+  console.log(user?.role == "admin")
 
   return (
     <div className="md:container md:mx-auto mt-6">
