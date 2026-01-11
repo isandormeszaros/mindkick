@@ -6,7 +6,7 @@ Ez a projekt egy kvíz platform, ami a tanulást és a szórakozást ötvözi ga
 
 ## Munkamegosztás
 
-A projektet két fő fejlesztő készíti. A feladatok három nagy funkcionális modulra lettek bontva. Mivel két fős a csapat, **Mészáros Sándor** végzi az 1. és a 2. modult, **Majnár Patrik** pedig a 3. és 4. modult.
+A projektet két fő fejlesztő készíti. A feladatok négy nagy funkcionális modulra lettek bontva. Mivel két fős a csapat, **Mészáros Sándor** végzi az 1., a 2. és a 3. modult, **Majnár Patrik** pedig 4. modult. A leosztás egyenlőtlenségének oka a harmadik csapattag távozása a projektből, emiatt a tapasztaltabb fejlesztő, Mészáros Sándor vállalta magára a feladatok elvégzését.
 
 ### Mészáros Sándor
 **Felelősségi kör:** Core Gameplay + Social & Discovery
@@ -28,6 +28,10 @@ Az admin felület kizárólag **admin jogosultsággal** rendelkező felhasznál�
   - Badge kezelés
   - Jogosultságok
 
+**3. Modul: Discover & Leaderboard**
+- Kiemelt és ajánlott kvízek, kategória szűrők.
+- Globális ranglista, dobogós helyezések (Top 3) vizuális kiemelése.
+
 ---
 
 ### Majnár Patrik
@@ -37,7 +41,3 @@ Az admin felület kizárólag **admin jogosultsággal** rendelkező felhasznál�
 - Bejelentkezés és Regisztráció űrlapok.
 - Felhasználói adatok, saját statisztikák megjelenítése.
 - Megszerzett badge (pl: streak, hibátlan kvíz) listázása.
-
-**4. Modul: Discover & Leaderboard**
-- Kiemelt és ajánlott kvízek, kategória szűrők.
-- Globális ranglista, dobogós helyezések (Top 3) vizuális kiemelése.

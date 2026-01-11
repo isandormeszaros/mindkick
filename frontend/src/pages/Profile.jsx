@@ -36,6 +36,7 @@ const Profile = () => {
         setLoading(false);
       } catch (err) {
         console.error("Hiba:", err);
+        navigate('/login')
         setError("Nem sikerült betölteni az adatokat. Lehet, hogy lejárt a bejelentkezésed.");
         setLoading(false);
       }
