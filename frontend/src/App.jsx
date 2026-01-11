@@ -5,6 +5,8 @@ import Home from "./pages/Home";
 import QuizList from "./components/quiz/QuizList";
 import QuizGame from "./components/quiz/QuizGame";
 import Leaderboard from "./pages//Leaderboard/Leaderboard";
+import Gameplay from './pages/Gameplay';
+import FriendsGame from './pages/FriendsGame';
 // import QuizList from "./pages/QuizList";
 
 import Login from "./pages/Login";
@@ -25,6 +27,8 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/gamesession" element={<Gameplay />} />
+          <Route path="/playwithfriends" element={<FriendsGame />} />
           <Route element={<AdminRoute />}>
         <Route path="/create" element={<CreateQuiz />} />
       </Route>
