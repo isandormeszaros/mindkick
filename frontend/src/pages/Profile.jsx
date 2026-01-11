@@ -27,11 +27,11 @@ const Profile = () => {
         setData(res.data);
         setLoading(false);
       } catch (err) {
-        console.error("Hiba:", err);
-        setError("Lejárt a munkamenet. Jelentkezz be újra.");
-        setLoading(false);
-      }
-    };
+  console.error("Hiba:", err);
+  localStorage.removeItem('user');
+  setLoading(false);
+  navigate('/login');
+}
 
     fetchData();
   }, [navigate]);
