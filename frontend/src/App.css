@@ -40,3 +40,86 @@
 .read-the-docs {
   color: #888;
 }
+
+/* --- Gameplay Page (Főoldal stílusban) --- */
+
+.gameplay-page {
+  max-width: 1200px;
+  margin: 60px auto;
+  padding: 0 2rem;
+}
+
+.gameplay-hero {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.gameplay-hero h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-bottom: 1rem;
+}
+
+.gameplay-hero p {
+  color: #64748b;
+  font-size: 1.1rem;
+}
+
+/* Rács elrendezés a 3 kártyának */
+.gameplay-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+/* A kártyák stílusa a Főoldal alapján */
+.feature-card {
+  background: white;
+  border-radius: 2rem; /* Extra kerekített sarkok */
+  padding: 3rem 2rem;
+  text-align: center;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(109, 40, 217, 0.08);
+}
+
+/* A középső kártya kiemelése */
+.highlighted-card {
+  border: 2px solid #6d28d9;
+}
+
+/* Ikon doboz a kártya tetején */
+.icon-box {
+  background: #fdfaff;
+  width: 60px;
+  height: 60px;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  font-size: 1.5rem;
+  color: #6d28d9;
+}
+
+.feature-card h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #1a1a1a;
+}
+
+.feature-card p {
+  color: #64748b;
+  line-height: 1.6;
+}
+
+/* Kért színes kiemelések */
+.pink-text { color: #db2777; font-weight: 700; }
+.blue-text { color: #2563eb; font-weight: 700; }
